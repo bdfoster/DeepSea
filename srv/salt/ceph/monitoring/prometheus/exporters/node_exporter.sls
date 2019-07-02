@@ -14,6 +14,13 @@ install_node_exporter:
     - refresh: True
     - fire_event: True
 
+{% elif grains.get('os', '') == 'Ubuntu' %}
+install_node_exporter:
+  pkg.installed:
+    - name: prometheus-node-exporter
+    - refresh: True
+    - fire_event: True
+
 {% else %}
 
 install node exporter package:
@@ -79,6 +86,14 @@ start node exporter:
     - enable: True
     - watch:
       - file: /etc/sysconfig/prometheus-node_exporter
+
+{% elif grains.get('os', '') == 'Ubuntu' %}
+start node exporter:
+  service.running:
+    - name: prometheus-node-exporter
+    - enable: True
+    - watch:
+      - file: /etc/default/prometheus-node-exporter
 
 {% else %}
 
